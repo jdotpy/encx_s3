@@ -22,10 +22,6 @@ class S3Backend(BasePlugin):
             'run': 'login',
             'help': 'Start new AWS session'
         },
-        's3:test': {
-            'run': 'test',
-            'help': 'You dont need help'
-        },
     }
     s3_protocol = 's3://'
     AWS_DIR = os.path.expanduser('~/.aws')
@@ -100,13 +96,6 @@ class S3Backend(BasePlugin):
         config.set(profile, 'region', region)
         with open(self.AWS_CONF_FILE, 'w') as output:
             config.write(output)
-
-    def test(self, args):
-        bucket_name, file_key = self._parse_s3_uri('s3://who-took-my-bucket/foobar.txt')
-        s3 = boto3.resource('s3')
-        bucket = s3.Bucket(bucket_name)
-        exists = self._is_existing_file(bucket, file_key)
-        print('Does the file exist?', exists)
 
     def load_s3_file(self, path):
         bucket_name, file_key = self._parse_s3_uri(path)
